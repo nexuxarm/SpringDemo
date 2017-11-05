@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <classPathEntry location="d:\SVN\demo\libs\ojdbc8.jar"/>
+  <context id="context1">
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+      connectionURL="jdbc:oracle:thin:@localhost:1521:orcl" userId="*****" password="******" />
+    <javaModelGenerator targetPackage="batch.demo.model"
+      targetProject="demo/src/main/java" />
+    <sqlMapGenerator targetPackage="batch.demo.mapper"
+      targetProject="demo/src/main/resources" />
+    <javaClientGenerator targetPackage="batch.demo.mapper"
+      targetProject="demo/src/main/java" type="XMLMAPPER" />
+    <table tableName="TEST"/>
+  </context>
+</generatorConfiguration>
