@@ -1,0 +1,60 @@
+	public static String getReplaceInnerSelect(String s) {
+		if (s == null || s.trim().length() == 0) return "";
+		String temp = s.trim();
+		for (int i = 0; i < 100; i++) {
+			System.out.println("temp=" + temp);
+			String innerSelect = getInnerSelect(temp);
+			System.out.println("innerSelect=" + innerSelect);
+			if (innerSelect != null && innerSelect.trim().length() > 0) {
+				String check = temp.replaceFirst("\\s+", " ");
+				if (check.toLowerCase().indexOf(("select " + innerSelect).toLowerCase()) == 0) break;
+				String innerRegex = getRegexSafeString(innerSelect);
+				temp = temp.replaceAll(innerRegex, "dummy_");			
+			} else {
+				break;
+			}
+		}
+		return temp;
+	}
+	
+	public static String getRegexSafeString(String s) {
+		if (s == null || s.trim().length() == 0) return "";
+		String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		String result = "";
+		char[] cl = s.trim().toCharArray();
+		for (char c : cl) {
+			String cs = "" + c;
+			if (cs.trim().length() > 0) {
+				if (alphabet.indexOf(cs) >= 0) {
+					result = result + cs;	
+				} else {
+					result = result + "\\" + cs;	
+				}
+			} else {				
+				result = result + "\\s";
+			}
+		}
+		return "[sS][eE][lL][eE][cC][tT]\\s*" + result + "\\s*[fF][rR][oO][mM]\\s*";
+	}
+	
+	public static String getInnerSelect(String s) {
+		if (s == null || s.trim().length() == 0) return "";
+		String result = null;
+		String temp = s.trim();
+		int firstSelectIdx = temp.toLowerCase().indexOf("select");
+		if (firstSelectIdx < 0) return temp;		
+		temp = temp.substring(firstSelectIdx + "select".length()).trim();
+		int firstForIdx = temp.toLowerCase().indexOf("from");
+		int secondSelectIdx = temp.toLowerCase().indexOf("select");
+		if (secondSelectIdx >= 0 && secondSelectIdx < firstForIdx) {
+			return getInnerSelect(temp);
+		}
+		
+		try {
+			result = temp.substring(0, firstForIdx).trim();	
+		} catch (Exception e) {
+			throw e;
+		}	
+		
+		return result;
+	}
